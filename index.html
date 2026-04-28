@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MACIO PIZZAS - Duelo de Pizzaiolos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2d1a0a 0%, #5c2e0e 100%);
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            padding: 20px;
+        }
+
+        /* TELA INICIAL */
+        .start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.92);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+        }
+
+        .start-card {
+            background: linear-gradient(145deg, #fff5e6, #ffe4cc);
+            border-radius: 50px;
+            padding: 40px;
+            max-width: 550px;
+            width: 90%;
+            text-align: center;
+            border: 3px solid #ff8c42;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .start-card h1 {
+            font-size: 2.2em;
+            color: #d43f00;
+            margin-bottom: 5px;
+        }
+
+        .start-card .sub {
+            color: #a0522d;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+
+        .config-group {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .config-group label {
+            display: block;
+            font-weight: bold;
+            color: #8b4513;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+
+        .config-group input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 10px;
+            background: #ffcc88;
+        }
+
+        .config-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 30px;
+            border: 2px solid #ff8c42;
+            background: white;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        .config-value {
+            margin-top: 5px;
+            font-size: 0.85em;
+            color: #d43f00;
+            font-weight: bold;
+        }
+
+        .shortcuts {
+            background: #ffefd5;
+            border-radius: 20px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .shortcuts h3 {
+            color: #8b4513;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .shortcut-grid {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .shortcut {
+            background: #ff8c42;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.2s;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.03);
+        }
+
+        /* GAME CONTAINER */
+        .game-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: #fef3e2;
+            border-radius: 40px;
+            padding: 25px;
+            border: 4px solid #ff8c42;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .logo-area {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-area h1 {
+            font-size: 2em;
+            color: #d43f00;
+        }
+
+        .logo-area p {
+            color: #a0522d;
+            font-size: 0.9em;
+        }
+
+        .config-bar {
+            background: #ffefd5;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .config-card {
+            background: white;
+            padding: 8px 15px;
+            border-radius: 30px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .arena {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .player-card {
+            flex: 1;
+            background: #ffefd5;
+            border-radius: 30px;
+            padding: 20px;
+            text-align: center;
+            border: 3px solid #ffb366;
+        }
+
+        .vs {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ff4400;
+            display: flex;
+            align-items: center;
+        }
+
+        .pizza-box {
+            background: #6b3a1a;
+            border-radius: 25px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .pizza-box h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .pizza-content {
+            background: #e8c47a;
+            border-radius: 20px;
+            padding: 15px;
+            min-height: 100px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ing-badge {
+            background: white;
+            padding: 6px 14px;
+            border-radius: 25px;
+            font-size: 0.85em;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .score-area {
+            margin: 10px 0;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #8b4513;
+        }
+
+        .timer {
+            background: #2a2a2a;
+            color: #ffaa33;
+            padding: 8px;
+            border-radius: 30px;
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+
+        .order-area {
+            background: #ffefd5;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .order-box {
+            background: #ff8c42;
+            border-radius: 20px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .order-ingredients {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .order-ing {
+            background: #ffe0b3;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: bold;
+            color: #8b4513;
+        }
+
+        .ing-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .ing-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: transform 0.05s linear;
+        }
+
+        .ing-btn:active { transform: scale(0.96); }
+
+        .ing-mussarela { background: #ffe0b3; color: #8b4513; border: 2px solid #d2691e; }
+        .ing-calabresa { background: #cd5c5c; color: white; border: 2px solid #8b0000; }
+        .ing-tomate { background: #ff6347; color: white; border: 2px solid #dc143c; }
+        .ing-manjericao { background: #6b8e23; color: white; border: 2px solid #556b2f; }
+        .ing-queijo { background: #ffd700; color: #8b4513; border: 2px solid #daa520; }
+
+        .powerups {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .power-btn {
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .deliver-btn {
+            width: 100%;
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 40px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .round-info {
+            background: #ffaa44;
+            padding: 8px;
+            border-radius: 25px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            color: #aaffaa;
+            padding: 12px 28px;
+            border-radius: 50px;
+            z-index: 1001;
+            font-weight: bold;
+            white-space: nowrap;
+            font-size: 1em;
+            animation: fadeOut 2s forwards;
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        @media (max-width: 800px) {
+            .arena { flex-direction: column; }
+            .vs { font-size: 1.5em; margin: 5px 0; }
+            .message { white-space: normal; width: 80%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TELA INICIAL -->
+<div id="startScreen" class="start-screen">
+    <div class="start-card">
+        <h1>🍕 MACIO PIZZAS 🍕</h1>
+        <div class="sub">⚔️ DUELO DE PIZZAIOLOS ⚔️</div>
+        
+        <div class="config-group">
+            <label>⏱️ SEU TEMPO POR ROUND</label>
+            <input type="range" id="startTime" min="5" max="20" value="12" step="1">
+            <div class="config-value" id="startTimeValue">12 segundos</div>
+        </div>
+        
+        <div class="config-group">
+            <label>🤖 VELOCIDADE DA IA</label>
+            <select id="startAiSpeed">
+                <option value="2000">🐢 Super Lenta (2s)</option>
+                <option value="1500">🦥 Lenta (1.5s)</option>
+                <option value="1000" selected>⚡ Normal (1s)</option>
+                <option value="600">🔥 Rápida (0.6s)</option>
+                <option value="300">💀 Muito Rápida (0.3s)</option>
+            </select>
+        </div>
+        
+        <div class="config-group">
+            <label>🎯 PRECISÃO DA IA</label>
+            <select id="startAiAccuracy">
+                <option value="0.8">😵 Erra muito (20% acerto)</option>
+                <option value="0.5" selected>🤔 Equilibrada (50% acerto)</option>
+                <option value="0.2">🧠 Esperta (80% acerto)</option>
+                <option value="0.05">🤖 Perfeita (95% acerto)</option>
+            </select>
+        </div>
+        
+        <div class="shortcuts">
+            <h3>⌨️ ATALHOS DO TECLADO</h3>
+            <div class="shortcut-grid">
+                <span class="shortcut">1 - MUSSARELA</span>
+                <span class="shortcut">2 - CALABRESA</span>
+                <span class="shortcut">3 - TOMATE</span>
+                <span class="shortcut">4 - MANJERICÃO</span>
+                <span class="shortcut">5 - QUEIJO</span>
+                <span class="shortcut">ENTER - ENTREGAR</span>
+            </div>
+        </div>
+        
+        <button class="start-btn" id="startGameBtn">🎮 COMEÇAR JOGO! 🎮</button>
+    </div>
+</div>
+
+<!-- JOGO (inicialmente escondido) -->
+<div id="gameContainer" class="game-container" style="display: none;">
+    <div class="logo-area">
+        <h1>🍕 MACIO PIZZAS 🍕</h1>
+        <p>▸ Monte a pizza IGUAL ao pedido e entregue antes do rival! ◂</p>
+    </div>
+    
+    <div class="config-bar">
+        <div class="config-card">⏱️ Tempo: <span id="gameTimeDisplay">12</span>s</div>
+        <div class="config-card">🤖 IA: <span id="gameAiSpeedDisplay">Normal</span></div>
+        <div class="config-card">🎯 Acerto: <span id="gameAiAccDisplay">50%</span></div>
+    </div>
+    
+    <div class="arena">
+        <div class="player-card">
+            <h2>👨‍🍳 VOCÊ</h2>
+            <div class="pizza-box">
+                <h3>🍕 SUA PIZZA:</h3>
+                <div class="pizza-content" id="playerPizza"></div>
+            </div>
+            <div class="score-area">⭐ PONTOS: <span id="playerScore">0</span></div>
+            <div class="timer" id="playerTimer">⏳ 0.0s</div>
+        </div>
+        
+        <div class="vs">⚔️ VS ⚔️</div>
+        
+        <div class="player-card">
+            <h2>🤖 RIVAL</h2>
+            <div class="pizza-box">
+                <h3>🍕 PIZZA DO RIVAL:</h3>
+                <div class="pizza-content" id="aiPizza"></div>
+            </div>
+            <div class="score-area">⭐ PONTOS: <span id="aiScore">0</span></div>
+            <div class="timer" id="aiTimer">⏳ 0.0s</div>
+        </div>
+    </div>
+    
+    <div class="order-area">
+        <strong>📋 PEDIDO DO CLIENTE:</strong>
+        <div class="order-box" id="orderBox"></div>
+    </div>
+    
+    <div class="round-info" id="roundInfo">🍕 ROUND 1 🍕</div>
+    
+    <div class="ing-buttons" id="ingButtons"></div>
+    
+    <div class="powerups">
+        <button class="power-btn" id="powerTurbo">🏍️ MOTO TURBO (50pts) +5s</button>
+        <button class="power-btn" id="powerOven">🔥 FORNO LENTO (60pts) IA 2x lenta</button>
+        <button class="power-btn" id="powerSabotage">👻 SABOTAGEM (80pts) IA erra mais</button>
+    </div>
+    
+    <button class="deliver-btn" id="deliverBtn">🚚 ENTREGAR PIZZA! (+10 bônus)</button>
+</div>
+
+<script>
+    // Ingredientes
+    const INGREDIENTES = [
+        { id: 'mussarela', nome: '🧀 MUSSARELA', cor: '#ffe0b3', btnClass: 'ing-mussarela' },
+        { id: 'calabresa', nome: '🌶️ CALABRESA', cor: '#cd5c5c', btnClass: 'ing-calabresa' },
+        { id: 'tomate', nome: '🍅 TOMATE', cor: '#ff6347', btnClass: 'ing-tomate' },
+        { id: 'manjericao', nome: '🌿 MANJERICÃO', cor: '#6b8e23', btnClass: 'ing-manjericao' },
+        { id: 'queijo', nome: '🧀 QUEIJO', cor: '#ffd700', btnClass: 'ing-queijo' }
+    ];
+    
+    // Estado do jogo
+    let playerPizza = [];
+    let aiPizza = [];
+    let playerScore = 0;
+    let aiScore = 0;
+    let currentOrder = [];
+    let round = 1;
+    let roundActive = true;
+    let gameStarted = false;
+    
+    let playerTimeLeft = 12;
+    let aiTimeLeft = 12;
+    let playerInterval = null;
+    let aiInterval = null;
+    let aiActionInterval = null;
+    
+    // Power-ups
+    let turboActive = false;
+    let ovenActive = false;
+    let sabotageActive = false;
+    
+    // Configurações
+    let configTime = 12;
+    let configAiSpeed = 1000;
+    let configAiAccuracy = 0.5;
+    
+    // Elementos DOM
+    const playerPizzaDiv = document.getElementById('playerPizza');
+    const aiPizzaDiv = document.getElementById('aiPizza');
+    const orderBox = document.getElementById('orderBox');
+    const playerScoreSpan = document.getElementById('playerScore');
+    const aiScoreSpan = document.getElementById('aiScore');
+    const playerTimerSpan = document.getElementById('playerTimer');
+    const aiTimerSpan = document.getElementById('aiTimer');
+    const roundInfoSpan = document.getElementById('roundInfo');
+    
+    function showMessage(msg, isError = false) {
+        const div = document.createElement('div');
+        div.className = 'message';
+        div.textContent = msg;
+        div.style.color = isError ? '#ffaaaa' : '#aaffaa';
+        document.body.appendChild(div);
+        setTimeout(() => div.remove(), 2000);
+    }
+    
+    function updateDisplay() {
+        // Pizza do jogador
+        playerPizzaDiv.innerHTML = '';
+        if (playerPizza.length === 0) {
+            playerPizzaDiv.innerHTML = '<span style="color:#8B4513;">⚪ Nenhum ingrediente</span>';
+        } else {
+            playerPizza.forEach(ingId => {
+                const ing = INGREDIENTES.find(i => i.id === ingId);
+                const badge = document.createElement('div');
+                badge.className = 'ing-badge';
+                badge.style.background = ing.cor;
+                badge.textContent = ing.nome;
+                playerPizzaDiv.appendChild(badge);
+            });
+        }
+        
+        // Pizza da IA
+        aiPizzaDiv.innerHTML = '';
+        if (aiPizza.length === 0) {
+            aiPizzaDiv.innerHTML = '<span style="color:#8B4513;">⚪ Nenhum ingrediente</span>';
+        } else {
+            aiPizza.forEach(ingId => {
+                const ing = INGREDIENTES.find(i => i.id === ingId);
+                const badge = document.createElement('div');
+                badge.className = 'ing-badge';
+                badge.style.background = ing.cor;
+                badge.textContent = ing.nome;
+                aiPizzaDiv.appendChild(badge);
+            });
+        }
+        
+        // Pedido
+        orderBox.innerHTML = `
+            <div class="order-ingredients">
+                ${currentOrder.map(ingId => {
+                    const ing = INGREDIENTES.find(i => i.id === ingId);
+                    return `<span class="order-ing" style="background:${ing.cor};">${ing.nome}</span>`;
+                }).join('')}
+            </div>
+            <div>💰 VALOR: ${calcOrderValue()} pontos</div>
+        `;
+        
+        // Placar
+        playerScoreSpan.textContent = playerScore;
+        aiScoreSpan.textContent = aiScore;
+    }
+    
+    function calcOrderValue() {
+        let base = currentOrder.length * 10;
+        if (round > 15) base += 40;
+        else if (round > 10) base += 30;
+        else if (round > 6) base += 20;
+        else if (round > 3) base += 10;
+        return base;
+    }
+    
+    function generateOrder() {
+        let count = 2;
+        if (round >= 5) count = 3;
+        if (round >= 10) count = 4;
+        if (round >= 15) count = 5;
+        if (round >= 20) count = 6;
+        
+        const order = [];
+        for (let i = 0; i < count; i++) {
+            const rand = INGREDIENTES[Math.floor(Math.random() * INGREDIENTES.length)];
+            order.push(rand.id);
+        }
+        return order;
+    }
+    
+    function comparePizza(pizza) {
+        const orderCopy = [...currentOrder];
+        const pizzaCopy = [...pizza];
+        if (pizzaCopy.length !== orderCopy.length) return false;
+        for (let ing of pizzaCopy) {
+            const idx = orderCopy.indexOf(ing);
+            if (idx !== -1) orderCopy.splice(idx, 1);
+            else return false;
+        }
+        return orderCopy.length === 0;
+    }
+    
+    function addIngredient(ingId) {
+        if (!roundActive || !gameStarted) {
+            showMessage("Espere o próximo round!", true);
+            return;
+        }
+        if (playerPizza.length >= currentOrder.length) {
+            showMessage("Já colocou ingredientes demais! Entregue!", true);
+            return;
+        }
+        playerPizza.push(ingId);
+        updateDisplay();
+        if (comparePizza(playerPizza) && playerPizza.length === currentOrder.length) {
+            showMessage("🎉 PIZZA COMPLETA! Clique em ENTREGAR! 🎉");
+        }
+    }
+    
+    function deliver() {
+        if (!roundActive || !gameStarted) return;
+        if (comparePizza(playerPizza) && playerPizza.length === currentOrder.length) {
+            const value = calcOrderValue() + 10;
+            playerScore += value;
+            updateDisplay();
+            showMessage(`✅ VOCÊ GANHOU! +${value} pontos!`);
+            nextRound();
+        } else {
+            showMessage("🍕 PIZZA ERRADA! Perdeu os ingredientes!", true);
+            playerPizza = [];
+            updateDisplay();
+        }
+    }
+    
+    function stopAllTimers() {
+        if (playerInterval) clearInterval(playerInterval);
+        if (aiInterval) clearInterval(aiInterval);
+        if (aiActionInterval) clearInterval(aiActionInterval);
+    }
+    
+    function startTimers() {
+        const playerMax = turboActive ? configTime + 5 : configTime;
+        const aiMax = ovenActive ? configTime * 2 : configTime;
+        
+        playerTimeLeft = playerMax;
+        aiTimeLeft = aiMax;
+        
+        playerTimerSpan.textContent = `${playerTimeLeft.toFixed(1)}s`;
+        aiTimerSpan.textContent = `${aiTimeLeft.toFixed(1)}s`;
+        
+        // Timer do jogador
+        playerInterval = setInterval(() => {
+            if (!roundActive) return;
+            playerTimeLeft -= 0.05;
+            playerTimerSpan.textContent = `${playerTimeLeft.toFixed(1)}s`;
+            if (playerTimeLeft <= 0) {
+                clearInterval(playerInterval);
+                showMessage("⏰ SEU TEMPO ACABOU! Rival venceu!", true);
+                aiWin();
+            }
+        }, 50);
+        
+        // Timer da IA
+        aiInterval = setInterval(() => {
+            if (!roundActive) return;
+            aiTimeLeft -= 0.05;
+            aiTimerSpan.textContent = `${aiTimeLeft.toFixed(1)}s`;
+            if (aiTimeLeft <= 0) {
+                clearInterval(aiInterval);
+                showMessage("⏰ RIVAL PERDEU O TEMPO! Você venceu!");
+                playerWin();
+            }
+        }, 50);
+        
+        // Ações da IA
+        aiActionInterval = setInterval(() => {
+            if (!roundActive) return;
+            if (aiPizza.length < currentOrder.length && aiTimeLeft > 0) {
+                let accuracy = configAiAccuracy;
+                if (sabotageActive) accuracy = Math.min(accuracy * 2, 0.95);
+                const chanceAcertar = 1 - accuracy;
+                const vaiAcertar = Math.random() < chanceAcertar;
+                
+                let ingrediente = null;
+                if (!vaiAcertar && currentOrder.length > 1) {
+                    const invalidos = INGREDIENTES.filter(ing => !currentOrder.includes(ing.id));
+                    if (invalidos.length > 0) {
+                        ingrediente = invalidos[Math.floor(Math.random() * invalidos.length)].id;
+                    } else {
+                        const missing = currentOrder.filter(ing => !aiPizza.includes(ing));
+                        if (missing.length) ingrediente = missing[0];
+                    }
+                } else {
+                    const missing = currentOrder.filter(ing => !aiPizza.includes(ing));
+                    if (missing.length) ingrediente = missing[0];
+                }
+                
+                if (ingrediente) {
+                    aiPizza.push(ingrediente);
+                    updateDisplay();
+                    if (comparePizza(aiPizza)) {
+                        showMessage("🤖 RIVAL COMPLETOU A PIZZA! Ele venceu!", true);
+                        aiWin();
+                    }
+                }
+            }
+        }, configAiSpeed);
+    }
+    
+    function playerWin() {
+        if (!roundActive) return;
+        roundActive = false;
+        stopAllTimers();
+        const value = calcOrderValue();
+        playerScore += value;
+        updateDisplay();
+        showMessage(`✅ VOCÊ VENCEU O ROUND! +${value} pontos!`);
+        nextRound();
+    }
+    
+    function aiWin() {
+        if (!roundActive) return;
+        roundActive = false;
+        stopAllTimers();
+        const value = calcOrderValue();
+        aiScore += value;
+        updateDisplay();
+        showMessage(`❌ RIVAL VENCEU! +${value} pontos!`, true);
+        nextRound();
+    }
+    
+    function nextRound() {
+        setTimeout(() => {
+            round++;
+            roundInfoSpan.textContent = `🍕 ROUND ${round} 🍕`;
+            playerPizza = [];
+            aiPizza = [];
+            turboActive = false;
+            ovenActive = false;
+            sabotageActive = false;
+            currentOrder = generateOrder();
+            roundActive = true;
+            updateDisplay();
+            startTimers();
+        }, 2200);
+    }
+    
+    function resetGame() {
+        stopAllTimers();
+        round = 1;
+        playerScore = 0;
+        aiScore = 0;
+        playerPizza = [];
+        aiPizza = [];
+        turboActive = false;
+        ovenActive = false;
+        sabotageActive = false;
+        roundActive = true;
+        roundInfoSpan.textContent = `🍕 ROUND 1 🍕`;
+        currentOrder = generateOrder();
+        updateDisplay();
+        startTimers();
+    }
+    
+    // Power-ups
+    function buyTurbo() {
+        if (!gameStarted) { showMessage("Jogo não começou!", true); return; }
+        if (playerScore >= 50 && !turboActive) {
+            playerScore -= 50;
+            turboActive = true;
+            updateDisplay();
+            showMessage("🏍️ MOTO TURBO ATIVO! +5 segundos neste round!");
+        } else if (turboActive) showMessage("Turbo já ativo!", true);
+        else showMessage("Precisa de 50 pontos!", true);
+    }
+    
+    function buyOven() {
+        if (!gameStarted) { showMessage("Jogo não começou!", true); return; }
+        if (playerScore >= 60 && !ovenActive) {
+            playerScore -= 60;
+            ovenActive = true;
+            updateDisplay();
+            showMessage("🔥 FORNO LENTO! Rival 2x mais lento!");
+        } else if (ovenActive) showMessage("Forno lento já ativo!", true);
+        else showMessage("Precisa de 60 pontos!", true);
+    }
+    
+    function buySabotage() {
+        if (!gameStarted) { showMessage("Jogo não começou!", true); return; }
+        if (playerScore >= 80 && !sabotageActive) {
+            playerScore -= 80;
+            sabotageActive = true;
+            updateDisplay();
+            showMessage("👻 SABOTAGEM! Rival vai errar muito mais!");
+        } else if (sabotageActive) showMessage("Sabotagem já ativa!", true);
+        else showMessage("Precisa de 80 pontos!", true);
+    }
+    
+    function createIngredientButtons() {
+        const container = document.getElementById('ingButtons');
+        container.innerHTML = '';
+        INGREDIENTES.forEach((ing, idx) => {
+            const btn = document.createElement('button');
+            btn.className = `ing-btn ${ing.btnClass}`;
+            btn.textContent = `${ing.nome} [${idx+1}]`;
+            btn.onclick = () => addIngredient(ing.id);
+            container.appendChild(btn);
+        });
+    }
+    
+    function startGame() {
+        // Pegar configurações da tela inicial
+        configTime = parseInt(document.getElementById('startTime').value);
+        configAiSpeed = parseInt(document.getElementById('startAiSpeed').value);
+        configAiAccuracy = parseFloat(document.getElementById('startAiAccuracy').value);
+        
+        // Atualizar display das configs
+        document.getElementById('gameTimeDisplay').textContent = configTime;
+        const speedText = document.getElementById('startAiSpeed').options[document.getElementById('startAiSpeed').selectedIndex].text;
+        document.getElementById('gameAiSpeedDisplay').textContent = speedText.split('(')[0].trim();
+        const accPercent = (1 - configAiAccuracy) * 100;
+        document.getElementById('gameAiAccDisplay').textContent = Math.round(accPercent) + '%';
+        
+        // Esconder tela inicial, mostrar jogo
+        document.getElementById('startScreen').style.display = 'none';
+        document.getElementById('gameContainer').style.display = 'block';
+        
+        gameStarted = true;
+        
+        // Inicializar jogo
+        createIngredientButtons();
+        round = 1;
+        playerScore = 0;
+        aiScore = 0;
+        playerPizza = [];
+        aiPizza = [];
+        turboActive = false;
+        ovenActive = false;
+        sabotageActive = false;
+        roundActive = true;
+        roundInfoSpan.textContent = `🍕 ROUND 1 🍕`;
+        currentOrder = generateOrder();
+        updateDisplay();
+        startTimers();
+        
+        // Configurar power-ups
+        document.getElementById('powerTurbo').onclick = buyTurbo;
+        document.getElementById('powerOven').onclick = buyOven;
+        document.getElementById('powerSabotage').onclick = buySabotage;
+        document.getElementById('deliverBtn').onclick = deliver;
+        
+        // Atalhos teclado
+        document.addEventListener('keydown', (e) => {
+            if (!gameStarted || !roundActive) return;
+            const key = e.key;
+            if (key >= '1' && key <= '5') {
+                const idx = parseInt(key) - 1;
+                if (idx >= 0 && idx < INGREDIENTES.length) {
+                    addIngredient(INGREDIENTES[idx].id);
+                }
+            } else if (key === 'Enter') {
+                deliver();
+            }
+        });
+    }
+    
+    // Eventos da tela inicial
+    document.getElementById('startTime').addEventListener('input', (e) => {
+        document.getElementById('startTimeValue').textContent = e.target.value + ' segundos';
+    });
+    document.getElementById('startGameBtn').onclick = startGame;
+    
+    // Valores iniciais
+    document.getElementById('startTimeValue').textContent = '12 segundos';
+</script>
+</body>
+</html>
