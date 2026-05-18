@@ -12,19 +12,18 @@ Este repositório contém:
 
 - Exercícios de lógica de programação  
 - Projetos em Java  
-- Interfaces web utilizando HTML, CSS e JavaScript  
 - Materiais de estudo e práticas  
-- Projetos do curso e do programa Entra21  
+- Projetos do curso
 
 ---
 
-## Tecnologias utilizadas
+## Tecnologias utilizadas ate o momento
 
-- Java  
-- HTML  
-- CSS  
-- JavaScript  
-- GitHub (controle de versão e organização)  
+<p align="center">
+  
+[![Java](https://skillicons.dev/icons?i=java)](https://github.com/)
+[![GitHub](https://skillicons.dev/icons?i=github)](https://github.com/)
+[![Excel](https://skillicons.dev/icons?i=excel)]
 
 ---
 ## Objetivo
