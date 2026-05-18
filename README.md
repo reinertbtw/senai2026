@@ -23,7 +23,7 @@ Este repositório contém:
   
 [![Java](https://skillicons.dev/icons?i=java)](https://github.com/)
 [![GitHub](https://skillicons.dev/icons?i=github)](https://github.com/)
-[![Excel](https://skillicons.dev/icons?i=excel)](https://github.com/)
+[![Excel](https://skillicons.dev/icons?i=excel)]
 
 ---
 ## Objetivo
