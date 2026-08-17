@@ -1,0 +1,50 @@
+table Livro {
+  id int pk
+  id_autor int
+  categoria varchar (100)
+  quantidade int
+  valor double
+  paginas int
+}
+
+table Autores {
+  id int pk
+  genero varchar(100)
+  nome varchar (100)
+  apelido varchar(100)
+}
+
+table Aluno {
+  id int pk
+  nome varchar(100)
+  idade int
+  cpf varchar (99)
+  email varchar (100)
+  telefone varchar (99)
+}
+
+table Funcionarios {
+  id int pk
+  salario int
+  cargo varchar (50)
+  expediente varchar (50)
+}
+
+table Emprestimos {
+  id int pk
+  valor int
+  devolucao boolean
+  multa int
+  periodo int
+}
+
+table Categoria {
+  id int pk
+  genero varchar (50)
+  "faixa etaria" int
+}
+
+Ref: Livro.id_autor > Autores.id
+Ref: Livro.id > Aluno.id
+Ref: Categoria.id > Livro.id
+Ref: Emprestimos.id > Aluno.id
